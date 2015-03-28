@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+							http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd ">
+	<bean class="org.springframework.jmx.export.MBeanExporter">
+		<property name="beans">
+			<map>
+				<entry key="Abc:pqr=xyz" value-ref="dog"></entry>
+				<entry key="Abc:pqr=xyz2" value-ref="cat"></entry>
+				<entry key="Adapter:name=Html" value-ref="htmlServerBean"></entry>
+			</map>
+		</property>
+		<property name="server" ref="mbeanServerBean"></property>
+		<property name="notificationListenerMappings">
+			<map>
+				<entry key="Abc:pqr=xyz">
+					<bean class="com.lisener.AnimalListener"></bean>
+				</entry>
+				<entry key="Abc:pqr=xyz2">
+					<bean class="com.lisener.AnimalListener"></bean>
+				</entry>
+			<!-- 	wild cards are allowed, as follows
+					<entry key="*">
+					<bean class="com.lisener.AnimalListener"></bean>
+				</entry> -->
+			</map>
+		</property>
+	</bean>
+	<bean id="dog" class="com.mbean.Dog"></bean>
+	<bean id="cat" class="com.mbean.Cat"></bean>
+	<bean id="mbeanServerBean" class="org.springframework.jmx.support.MBeanServerFactoryBean"></bean>
+	<bean id="htmlServerBean" class="com.sun.jdmk.comm.HtmlAdaptorServer">
+		<constructor-arg value="9000"></constructor-arg>
+	</bean>
+</beans>
